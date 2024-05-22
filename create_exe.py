@@ -26,6 +26,8 @@ def createHiddenImportStr():
         "sklearn.metrics.pairwise",
         "sklearn.metrics._pairwise_distances_reduction._datasets_pair",
         "sklearn.metrics._pairwise_distances_reduction",
+        "scipy.special._cdflib",
+        "pkg_resources.extern",
         # "torch",
         # "torchvision",
         # "torch.jit",
