@@ -64,19 +64,18 @@ def generateExeName(use_exe: bool, use_tf: bool) -> str:
 
 
 if __name__ == "__main__":
-
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("-n", type=int, default=10,
-        help="number of inferences per profile. default 10",
+        help="Number of inferences per profile",
     )
     parser.add_argument("-i", type=int, default=50, required=False,
-        help="number of profiles to run per model, default 50",
+        help="Number of profiles to run per model",
     )
     parser.add_argument("-gpu", type=int, default=0,
-        help="-1 for cpu, else number of gpu, default 0",
+        help="-1 for cpu, else number of gpu",
     )
     parser.add_argument("-sleep", type=int, default=10,
-        help="how long to sleep in between models in seconds, default 10",
+        help="How long to sleep in between models in seconds",
     )
     parser.add_argument("-input", type=str, 
         help="Input type to pass to model. See construct_inputs.py"
@@ -101,7 +100,7 @@ if __name__ == "__main__":
     parser.add_argument("-nosave", action="store_true",
         help="Do not save any traces, just debug."
     )
-    parser.add_argument("-models", default=[], required=False, nargs="*",
+    parser.add_argument("-models", default=[], nargs="*",
         help="List of models to profile separated by spaces.  Default is all models.",
     )
     parser.add_argument("-noexe", action="store_true",
