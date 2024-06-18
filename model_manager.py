@@ -5,11 +5,6 @@ Assuming that the victim model architecture has already been found/predicted,
 the surrogate model can be trained using labels from the victim model.
 """
 
-import sys
-import os
-# Add the parent directory to sys.path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 import datetime
 import json
 import shutil
@@ -36,13 +31,13 @@ from get_model import (
     get_quantized_model,
     quantized_models,
 )
-from datasets.datasets import Dataset
-from utils.logger import CSVLogger
-from utils.online import OnlineStats
-from utils.utils import latest_file, latestFileFromList, checkDict
-from dnn.model_metrics import correct, accuracy, both_correct
-from profiles.collect_profiles import run_command, generateExeName
-from profiles.format_profiles import parse_one_profile, avgProfiles
+from datasets import Dataset
+from logger import CSVLogger
+from online import OnlineStats
+from model_metrics import correct, accuracy, both_correct
+from collect_profiles import run_command, generateExeName
+from utils import latest_file, latestFileFromList, checkDict
+from format_profiles import parse_one_profile, avgProfiles
 from architecture_prediction import ArchPredBase
 
 
