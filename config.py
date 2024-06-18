@@ -13,5 +13,5 @@ SYSTEM_SIGNALS = ["sm_clock_(mhz)", "memory_clock_(mhz)", "temperature_(c)", "po
 CHANNELS = 3
 INPUT_SIZE = 224
 
-EMAIL_CONF = {"sender": "kundu.lab.keb310@gmail.com", "pw": "email_pw.txt", "reciever": "jobrienweiss@umass.edu", "send": True}
+EMAIL_CONF = {"sender": "rajahasnain570@gmail.com", "pw": "email_pw.txt", "receiver": "ranwar@umass.edu", "send": True}
 EMAIL = EmailSender(**EMAIL_CONF)

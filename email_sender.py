@@ -10,12 +10,12 @@ from utils import timer, dict_to_str
 
 
 class EmailSender:
-    """Stores email sender, reciever, and pw."""
+    """Stores email sender, receiver, and pw."""
 
     def __init__(
         self,
         sender: str = None,
-        reciever: str = None,
+        receiver: str = None,
         pw: str = None,
         send: bool = True,
         **kwargs,
@@ -23,15 +23,15 @@ class EmailSender:
         """Store email params."""
 
         self.sender = sender
-        self.reciever = reciever
+        self.receiver = receiver
         self.pw = self.retrieve_pw(pw)
         self.send = send
         if not self.send:
             print(f"Email settings: send set to {send}")
         # dummy function in case an argument is not provided:
-        if None in (sender, reciever, pw):
+        if None in (sender, receiver, pw):
             print(
-                "At least one of email sender, reciever, or pw was not"
+                "At least one of email sender, receiver, or pw was not"
                 "specified, will not send any emails."
             )
             self.email = lambda subject, content: 0
@@ -53,7 +53,7 @@ class EmailSender:
             content=content,
             subject=subject,
             sender=self.sender,
-            reciever=self.reciever,
+            receiver=self.receiver,
             pw=self.pw,
             send=self.send,
         )
@@ -106,7 +106,7 @@ def email(
     content: str,
     subject: str,
     sender: str,
-    reciever: str,
+    receiver: str,
     pw: str = None,
     send: bool = True,
 ) -> None:
@@ -115,7 +115,7 @@ def email(
     :param content: the message inside the email.
     :param subject: the subject line.
     :param sender: the sending email address.
-    :param reciever: the destination email address.
+    :param receiver: the destination email address.
     :param pw: the gmail password for the sending email address.
     :param send: will only send an email if this is true.
     :return: None
@@ -127,14 +127,14 @@ def email(
     message = MIMEMultipart()
     message["Subject"] = subject
     message["From"] = sender
-    message["To"] = reciever
+    message["To"] = receiver
     message.attach(MIMEText(content, "plain"))
 
     try:
         context = ssl.create_default_context()
         with SMTP_SSL(host="smtp.gmail.com", port=465, context=context) as server:
             server.login(sender, pw)
-            server.sendmail(sender, reciever, message.as_string())
+            server.sendmail(sender, receiver, message.as_string())
             server.quit()
     except Exception as e:
         print("Error while trying to send email: \n%s", e)
