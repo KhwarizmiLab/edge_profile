@@ -66,32 +66,19 @@ def generateExeName(use_exe: bool, use_tf: bool) -> str:
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-n",
-        type=int,
-        default=10,
-        required=False,
+    parser.add_argument("-n", type=int, default=10,
         help="number of inferences per profile. default 10",
     )
-    parser.add_argument(
-        "-i",
-        type=int,
+    parser.add_argument("-i", type=int,
         default=50,
         required=False,
         help="number of profiles to run per model, default 50",
     )
-    parser.add_argument(
-        "-gpu",
-        type=int,
-        default=0,
-        required=False,
+    parser.add_argument("-gpu", type=int, default=0,
         help="-1 for cpu, else number of gpu, default 0",
     )
     parser.add_argument(
-        "-sleep",
-        type=int,
-        default=10,
-        required=False,
+        "-sleep", type=int, default=10,
         help="how long to sleep in between models in seconds, default 10",
     )
     parser.add_argument(
@@ -101,9 +88,7 @@ if __name__ == "__main__":
         "-pretrained", action="store_true", help="Use a pretrained model"
     )
     parser.add_argument(
-        "-seed",
-        type=int,
-        default=-1,
+        "-seed", type=int, default=-1,
         help="If random inputs are specified and this seed is given: "
         "will generate the same inputs for every profile. "
         "Example: profile1: modelA: inputsX, modelB: inputsX, "
@@ -114,33 +99,26 @@ if __name__ == "__main__":
         "profile2: modelA: inputsY, modelB: inputsY.",
     )
     parser.add_argument(
-        "-folder",
-        type=str,
-        default=None,
+        "-folder", type=str, default=None,
         help="Name of subfolder under cwd/profiles/<gpu_name>/ to save these profiles to.  "
         "Default is the date and time.",
     )
     parser.add_argument(
-        "-noexe",
-        action="store_true",
+        "-nosave", action="store_true", help="do not save any traces, just debug."
+    )
+    parser.add_argument(
+        "-models", default=[], required=False, nargs="*",
+        help="List of models to profile separated by spaces.  Default is all models.",
+    )
+    parser.add_argument(
+        "-noexe", action="store_true",
         help="If provided, will run the inference using the python file"
         " rather than the executable file. This is faster but "
         " is not the type of attack vector considered, so it "
         " should only be used for debugging.",
     )
     parser.add_argument(
-        "-nosave", action="store_true", help="do not save any traces, just debug."
-    )
-    parser.add_argument(
-        "-models",
-        default=[],
-        required=False,
-        nargs="*",
-        help="List of models to profile separated by spaces.  Default is all models.",
-    )
-    parser.add_argument(
-        "-use_tf",
-        action="store_true",
+        "-use_tf", action="store_true",
         help="Use tensorflow for profiling.  Requires -noexe flag as well."
     )
     parser.add_argument("-email", action="store_true", help="send emails when each model is done profiling.")
