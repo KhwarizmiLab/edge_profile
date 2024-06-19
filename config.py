@@ -6,6 +6,7 @@ from email_sender import EmailSender
 
 
 VALID_MODELS = list(name_to_family.keys())
+TEXT_MODELS = [x for x in list(name_to_family.keys()) if x.endswith("ENCODER")]
 
 # models for which to collect profiles for, may be a subset of all valid models
 MODELS = VALID_MODELS   # MODELS = ["googlenet", "mobilenetv3", "resnet", "vgg"]

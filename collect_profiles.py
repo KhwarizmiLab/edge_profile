@@ -101,7 +101,7 @@ if __name__ == "__main__":
         help="Do not save any traces, just debug."
     )
     parser.add_argument("-models", default=[], nargs="*",
-        help="List of models to profile separated by spaces.  Default is all models.",
+        help="List of models to profile separated by spaces. Case Sensitive.  Default is all models.",
     )
     parser.add_argument("-noexe", action="store_true",
         help="If provided, will run the inference using the python file"
@@ -179,7 +179,7 @@ if __name__ == "__main__":
                 command = (
                     f"nvprof --csv --log-file {log_file_prefix}%p.csv --system-profiling on "
                     f"--profile-child-processes {executable} -gpu {args.gpu} -model {model} -seed {seed} "
-                    f"-n {args.n} -input {args.input}"
+                    f"-n {args.n} -input {'text' if model in config.TEXT_MODELS else args.input}" # "text" input for LLM models
                 )
 
                 if args.pretrained:

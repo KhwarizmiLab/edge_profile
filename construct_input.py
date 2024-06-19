@@ -27,5 +27,5 @@ def construct_input(type: str, number: int, seed=None, ftn=None) -> torch.Tensor
         torch.manual_seed(seed)
 
     if ftn:
-        return to_tensor(ftn(LLM_INPUT))
+        return to_tensor(ftn(LLM_INPUT), padding_value=1)
     return VALID_INPUTS[type](number, config.CHANNELS, config.INPUT_SIZE, config.INPUT_SIZE)
