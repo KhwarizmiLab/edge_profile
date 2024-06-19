@@ -93,7 +93,7 @@ def getModelParams(model_arch: str):
     }
     return model_params.get(model_arch, {})
 
-def get_model(model_arch:str, pretrained=False, kwargs={}):
+def get_model(model_arch:str, llm=False, pretrained=False, kwargs={}):
     """If pretrained is true, does not pass kwargs"""
     model_arch = model_arch.lower()
     if model_arch not in name_to_family:
@@ -110,7 +110,7 @@ def get_model(model_arch:str, pretrained=False, kwargs={}):
             print("Cannot reset number of classes on pretrained model, will default to 1000.")
         return model
     print(f"Passing {kwargs} args to torch to construct {model_arch}")
-    return getattr(models, model_arch)(pretrained=pretrained, **kwargs)
+    return getattr(models, model_arch)(pretrained=pretrained, **kwargs), None
 
 
 def get_quantized_model(model_arch: str, kwargs={}):
