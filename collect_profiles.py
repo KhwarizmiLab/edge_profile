@@ -27,9 +27,9 @@ from format_profiles import validProfile
 def run_command(folder, command):
     """Runs a command which is assumed to add a new profile to <folder>.  Then validate the profile."""
     # should be a blocking call, so the latest file is valid.
-    output = subprocess.run(shlex.split(command), stdout=sys.stdout)
+    output = subprocess.run(shlex.split(command), capture_output=True, text=True)
     profile_file = latest_file(folder)
-    return validProfile(profile_file), profile_file
+    return validProfile(profile_file), profile_file, output
 
 
 def run_command_popen(folder, command, model_type):
@@ -192,10 +192,10 @@ if __name__ == "__main__":
                     )
 
                 # sometimes nvprof fails, keep trying until it succeeds.
-                success, file = run_command(model_folder, command)
+                success, file, output = run_command(model_folder, command)
                 retries = 0
                 while not success:
-                    print(f"\nNvprof failed while running command\n\n{command}\n\nretrying ... \n")
+                    print(f"\nNvprof failed while running command\n\n{command}\n\nERROR:\n{output.stderr}\n\n\nretrying ... \n")
                     time.sleep(10)
                     latest_file(model_folder).unlink()
                     success, file = run_command(model_folder, command)
