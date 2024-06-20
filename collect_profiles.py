@@ -119,6 +119,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     models_to_profile = config.MODELS
+    #models_to_profile = config.TEXT_MODELS
     if len(args.models) > 0:
         models_to_profile = args.models
         print(f"Profiling models {models_to_profile}")
@@ -191,6 +192,7 @@ if __name__ == "__main__":
                         f"--profile-child-processes {executable} -gpu {args.gpu} -model {model}"
                     )
 
+                print(f"Running: {command}")
                 # sometimes nvprof fails, keep trying until it succeeds.
                 success, file, output = run_command(model_folder, command)
                 retries = 0
@@ -232,4 +234,6 @@ if __name__ == "__main__":
             
         if args.nosave:
             shutil.rmtree(profile_folder)
+        
+        print("Profiling finished.")
     
