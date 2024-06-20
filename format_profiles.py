@@ -617,6 +617,6 @@ if __name__ == "__main__":
     # validate_class_balance("zero_noexe_lots_models")
     a = argparse.ArgumentParser()
     a.add_argument("-folder", type=str, required=True, help="folder with profiles")
-    a.parse_args()
-    read_csv(a.folder)
+    args = a.parse_args()
+    read_csv(Path(args.folder))
     exit(0)
