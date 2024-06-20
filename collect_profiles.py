@@ -235,5 +235,5 @@ if __name__ == "__main__":
         if args.nosave:
             shutil.rmtree(profile_folder)
         
-        print("Profiling finished.")
+    print("Profiling finished.")
     
