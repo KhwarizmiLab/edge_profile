@@ -1,6 +1,6 @@
-cleverhans==4.0.0
 numpy
 pandas
+cleverhans==4.0.0
 pyinstaller==4.9
 pyprof==0.0.7
 scikit_learn==1.1.3

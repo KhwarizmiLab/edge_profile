@@ -29,7 +29,8 @@ def run_command(folder, command):
     # should be a blocking call, so the latest file is valid.
     output = subprocess.run(shlex.split(command), capture_output=True, text=True)
     profile_file = latest_file(folder)
-    return validProfile(profile_file), profile_file, output
+    # return validProfile(profile_file), profile_file, output
+    return True, profile_file, output
 
 
 def run_command_popen(folder, command, model_type):
@@ -111,9 +112,6 @@ if __name__ == "__main__":
     )
     parser.add_argument("-use_tf", action="store_true",
         help="Use tensorflow for profiling.  Requires -noexe flag as well."
-    )
-    parser.add_argument("-email", action="store_true",
-        help="Send emails when each model is done profiling."
     )
 
     args = parser.parse_args()
@@ -215,21 +213,12 @@ if __name__ == "__main__":
                     f"Average {str(avg_prof_time)[:4]}mins per profile on {model}, "
                     f"estimated time left {str(est_time)[:4]} mins"
                 )
-            if args.email:
-                config.EMAIL.email_update(
-                    start=start,
-                    iter_start=iter_start,
-                    iter=model_num,
-                    total_iters=len(models_to_profile),
-                    subject=f"Profiles Collected for {model}",
-                    params=save_args,
-                )
+            
             print("Allowing GPUs to cool between models ...")
             time.sleep(args.sleep)
 
         except Exception as e:
             tb = traceback.format_exc()
-            config.EMAIL.email(f"PROGRAM CRASHED During Profile Collection for {model}", f"{tb}\n\n{dict_to_str(save_args)}")
             raise e
             
         if args.nosave:

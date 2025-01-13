@@ -20,7 +20,7 @@ def check_profile(profile_csv):
     Check 2: nvprof warnings, will be more than 3 lines at the beginning starting with '=='
     """
 
-    with open(profile_csv, "r") as f:
+    with open(profile_csv, "r", encoding='utf-8', errors="ignore") as f:
         equal_line_count = 0
         for i, line in enumerate(f):
             if line.startswith("=="):
