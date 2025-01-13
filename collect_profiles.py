@@ -119,7 +119,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     models_to_profile = config.MODELS
-    #models_to_profile = config.TEXT_MODELS
+    # models_to_profile = config.TEXT_MODELS
     if len(args.models) > 0:
         models_to_profile = args.models
         print(f"Profiling models {models_to_profile}")

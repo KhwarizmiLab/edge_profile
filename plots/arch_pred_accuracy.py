@@ -47,7 +47,7 @@ rc('figure', **{'figsize': (5, 4)})
 def getDF(path: Path = None, to_keep_path: Path = None, save_path: Path = None, gpu_activities_only=False):
     if to_keep_path is None:
         to_keep_path = (
-            Path.cwd() / "profiles" / "quadro_rtx_8000" / "zero_exe_pretrained"
+            Path.cwd() / "profiles" / "tesla_t4" / "colab_zero_pretrained_all_noexe"
         )
     if path is None:
         path = to_keep_path
@@ -123,9 +123,10 @@ def generateReport(
                     )
                     report[model_name]["train_acc"][i][exp] = model.evaluateTrain()
                     report[model_name]["val_acc"][i][exp] = model.evaluateTest()
-                    report[model_name]["test_acc"][i][exp] = predictVictimArchs(
-                        model, folder=Path.cwd() / "victim_profiles", save=False, topk=1, verbose=False
-                    )["accuracy_k"][1]
+                    report[model_name]["test_acc"][i][exp] = -1
+                    # predictVictimArchs(
+                    #     model, folder=Path.cwd() / "victim_profiles", save=False, topk=1, verbose=False
+                    # )["accuracy_k"][1]
                     if model.deterministic:
                         # only need to run one experiment, copy the result to the array
                         report[model_name]["train_acc"][i] = np.full((num_experiments), report[model_name]["train_acc"][i][exp])
@@ -212,7 +213,7 @@ def plotFromReport(
     title: bool = True,
 ):
     if save_name is None:
-        save_name = "arch_pred_acc.png"
+        save_name = "arch_pred_acc.pdf"
     if datasets is None:
         datasets = ["val"]
     x_axis = report["x_axis"]
@@ -261,10 +262,10 @@ def plotFromReport(
     
     plt.legend(loc=(0.68, 0.23))
     
-    if not save_name.endswith(".png"):
-        save_name += ".png"
+    if not save_name.endswith(".pdf"):
+        save_name += ".pdf"
     
-    plt.savefig(Path(__file__).parent / "arch_pred_acc" / save_name, dpi=500, bbox_inches="tight")
+    plt.savefig(Path(__file__).parent / "arch_pred_acc" / save_name, dpi=1000, bbox_inches="tight")
 
 
 if __name__ == "__main__":
@@ -291,7 +292,7 @@ if __name__ == "__main__":
     # ------------------------------------------------------------------------------
     
     load_report = (
-        True  # if true, load report from file, if false, generate report and save
+        False  # if true, load report from file, if false, generate report and save
     )
 
     # parameters for generating a report, for loading a report, only the first variable
@@ -299,7 +300,7 @@ if __name__ == "__main__":
     # report_name = "combined_report" 
     report_name = features_filename
 
-    folder = Path.cwd() / "profiles" / "quadro_rtx_8000" / "zero_exe_pretrained"
+    folder = Path.cwd() / "profiles" / "tesla_t4" / "colab_zero_pretrained_all_noexe"
     model_names = arch_model_names()  # all the models we want to use
     # model_names = ["lr", "knn", "centroid", "nb"]
     num_experiments = 10
