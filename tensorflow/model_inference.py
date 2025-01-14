@@ -5,8 +5,7 @@ This file is turned into an executable and profiling is enabled while running th
 import argparse
 import numpy as np
 import tensorflow as tf
-import tensorflow_hub as hub
-from transformers import BertTokenizer, TFAutoModel, AutoTokenizer
+from transformers import TFAutoModel, AutoTokenizer
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-model", type=str, default="resnet50", required=False)
@@ -50,15 +49,21 @@ MODEL_MAP = {
     "convnext_base": tf.keras.applications.ConvNeXtBase,
     "convnext_large": tf.keras.applications.ConvNeXtLarge,
     "convnext_xlarge": tf.keras.applications.ConvNeXtXLarge,
-    "bert": lambda: hub.KerasLayer("https://tfhub.dev/tensorflow/bert_en_uncased_L-12_H-768_A-12/3"),
-    "xlm_roberta_base": lambda: TFAutoModel.from_pretrained("jplu/tf-xlm-roberta-base"),
-    "llama3": lambda: TFAutoModel.from_pretrained("facebook/llama-3b"),
-    "llama": lambda: TFAutoModel.from_pretrained("facebook/llama-7b"),
+    "xlm_roberta": lambda: TFAutoModel.from_pretrained("jplu/tf-xlm-roberta-base"),
     "gpt2": lambda: TFAutoModel.from_pretrained("gpt2"),
-    "gemma": lambda: TFAutoModel.from_pretrained("gemma"),
+    "gemma": lambda: TFAutoModel.from_pretrained("google/gemma-7b"),
     "bert": lambda: TFAutoModel.from_pretrained("bert-base-uncased"),
     "albert": lambda: TFAutoModel.from_pretrained("albert-base-v2"),
     "bart": lambda: TFAutoModel.from_pretrained("facebook/bart-large"),
+}
+
+identifiers = {
+    "xlm_roberta": "jplu/tf-xlm-roberta-base",
+    "gpt2": "gpt2",
+    "gemma": "google/gemma-7b",
+    "bert": "bert-base-uncased",
+    "albert": "albert-base-v2",
+    "bart": "facebook/bart-large",
 }
 
 name_to_family = {
@@ -88,11 +93,9 @@ name_to_family = {
     "convnext_base": "convnext",
     "convnext_large": "convnext",
     "convnext_xlarge": "convnext",
-    "bert": "bert",
-    "xlm_roberta_base": "xlm_roberta",
+    "xlm_roberta": "xlm_roberta",
     "llama3": "llama",
-    "llama": "llama",
-    "gpt2": "gpt2",
+    "gpt2": "gpt",
     "gemma": "gemma",
     "bert": "bert",
     "albert": "albert",
@@ -119,7 +122,7 @@ with tf.device(getDeviceName(args.gpu)):
             input = tf.constant(0.0, dtype=tf.float32, shape=(224, 224, 3))
             input = np.expand_dims(input, axis=0)
             output = model(input)
-        elif name_to_family[args.model] in ["bert", "xlm_roberta", "llama", "gpt2", "gemma", "albert", "bart"]:
+        elif name_to_family[args.model] in ["bert", "xlm_roberta", "llama", "gpt", "gemma", "albert", "bart"]:
             tokenizer = AutoTokenizer.from_pretrained(args.model)
             input_text = "This is a sample input text for the model."
             inputs = tokenizer(input_text, return_tensors='tf')

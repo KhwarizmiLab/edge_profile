@@ -1,13 +1,12 @@
 numpy
 pandas
+tensorflow
+transformers
+tensorflow_hub
 cleverhans==4.0.0
 pyinstaller==4.9
 pyprof==0.0.7
 scikit_learn==1.1.3
-tensorflow==2.12.0
-torch==2.3.0
-torchvision==0.18.0
-torchtext==0.18.0
 tornado
 tqdm==4.64.1
 onnx==1.13.0
