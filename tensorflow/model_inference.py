@@ -76,10 +76,11 @@ model = MODEL_MAP[args.model]()
 print(f"Running {args.n} inferences on {args.model} on {getDeviceName(args.gpu)}...")
 
 with tf.device(getDeviceName(args.gpu)):
-    # input = tf.constant(0.0, dtype=tf.float32, shape=pretrained_model.input_shape[1:])
-    input = tf.constant(0.0, dtype=tf.float32, shape=(224, 224, 3))
-    input = np.expand_dims(input, axis=0)
-    output = model(input)
-print(np.argmax(output))
+    for i in range(args.n):
+        # input = tf.constant(0.0, dtype=tf.float32, shape=pretrained_model.input_shape[1:])
+        input = tf.constant(0.0, dtype=tf.float32, shape=(224, 224, 3))
+        input = np.expand_dims(input, axis=0)
+        output = model(input)
+        print(np.argmax(output))
 
 print("Completed.")

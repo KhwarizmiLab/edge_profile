@@ -5,9 +5,7 @@ Some parameters come from command line and some from config.py.  TODO - make eve
 """
 
 import json
-import os
 import shutil
-import sys
 import subprocess
 from pathlib import Path
 import argparse
@@ -15,12 +13,10 @@ import shlex
 import time
 import random
 import traceback
-from typing import List
 
 import torch
 
-import config
-from utils import getSystem, latest_file, dict_to_str
+from utils import getSystem, latest_file
 from format_profiles import validProfile
 
 
@@ -52,18 +48,6 @@ def run_command_popen(folder, command, model_type):
     return validProfile(profile_file), profile_file
 
 
-def generateExeName(use_exe: bool, use_tf: bool) -> str:
-    if use_tf:
-        assert not use_exe
-        return "python " + str(Path(__file__).parent / "tensorflow" / "model_inference.py")
-    system = getSystem()
-    executable = f"exe/{system}/{system}_inference.exe"
-    if not use_exe:
-        # use python file instead
-        executable = "python model_inference.py"
-    return executable
-
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("-n", type=int, default=10,
@@ -80,9 +64,6 @@ if __name__ == "__main__":
     )
     parser.add_argument("-input", type=str, 
         help="Input type to pass to model. See construct_inputs.py"
-    )
-    parser.add_argument("-pretrained", action="store_true",
-        help="Use a pretrained model"
     )
     parser.add_argument("-seed", type=int, default=-1,
         help="If random inputs are specified and this seed is given: "
@@ -104,19 +85,10 @@ if __name__ == "__main__":
     parser.add_argument("-models", default=[], nargs="*",
         help="List of models to profile separated by spaces. Case Sensitive.  Default is all models.",
     )
-    parser.add_argument("-noexe", action="store_true",
-        help="If provided, will run the inference using the python file"
-        " rather than the executable file. This is faster but "
-        " is not the type of attack vector considered, so it "
-        " should only be used for debugging.",
-    )
-    parser.add_argument("-use_tf", action="store_true",
-        help="Use tensorflow for profiling.  Requires -noexe flag as well."
-    )
 
     args = parser.parse_args()
 
-    models_to_profile = config.MODELS
+    models_to_profile = ["resnet50", "resnet101", "resnet152", "vgg16", "vgg19", "densenet121", "densenet169", "densenet201", "mobilenet_v2", "mobilenet_v3_large", "mobilenet_v3_small"]
     # models_to_profile = config.TEXT_MODELS
     if len(args.models) > 0:
         models_to_profile = args.models
@@ -136,7 +108,7 @@ if __name__ == "__main__":
     i_seeds = [random.randint(0, 999999) for i in range(args.i)]
 
     # file to execute
-    executable = generateExeName(use_exe=not args.noexe, use_tf=args.use_tf)
+    executable = "python " + str(Path(__file__).parent / "tensorflow" / "model_inference.py")
 
     # save arguments to json file
     file = profile_folder / "arguments.json"
@@ -174,21 +146,11 @@ if __name__ == "__main__":
                 else:
                     # each profile uses the same inputs
                     seed = args.seed
-
+                
                 command = (
                     f"nvprof --csv --log-file {log_file_prefix}%p.csv --system-profiling on "
-                    f"--profile-child-processes {executable} -gpu {args.gpu} -model {model} -seed {seed} "
-                    f"-n {args.n} -input {'text' if model in config.TEXT_MODELS else args.input}" # "text" input for LLM models
+                    f"--profile-child-processes {executable} -n {args.n} -gpu {args.gpu} -model {model}"
                 )
-
-                if args.pretrained:
-                    command += " -pretrained"
-                
-                if args.use_tf:
-                    command = (
-                        f"nvprof --csv --log-file {log_file_prefix}%p.csv --system-profiling on "
-                        f"--profile-child-processes {executable} -n {args.n} -gpu {args.gpu} -model {model}"
-                    )
 
                 print(f"Running: {command}")
                 # sometimes nvprof fails, keep trying until it succeeds.
@@ -225,4 +187,3 @@ if __name__ == "__main__":
             shutil.rmtree(profile_folder)
         
     print("Profiling finished.")
-    

@@ -3,7 +3,6 @@ Configuration of profile collection and model construction.
 """
 from get_model import name_to_family
 
-
 VALID_MODELS = list(name_to_family.keys())
 TEXT_MODELS = [x for x in list(name_to_family.keys()) if x.endswith("ENCODER")]
 
