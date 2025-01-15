@@ -3,19 +3,26 @@ import torchtext.models as text_models
 import torch
 
 alexnet = "alexnet", ['alexnet']
+convnext = "convnext", ['convnext_tiny', 'convnext_small', 'convnext_base']
+densenet = "densenet", ['densenet121', 'densenet161', 'densenet169', 'densenet201']
+efficientnet = "efficientnet", ['efficientnet_b0', 'efficientnet_b1', 'efficientnet_b2', 'efficientnet_b3', 'efficientnet_b4', 'efficientnet_b5', 'efficientnet_b6', 'efficientnet_b7',
+                                'efficientnet_v2_s', 'efficientnet_v2_m', 'efficientnet_v2_l']
+googlenet = "googlenet", ['googlenet']
+inception = "inception", ['inception_v3']
+maxvit = "maxvit", ['maxvit_t']
+mnasnet = "mnasnet", ['mnasnet0_5', 'mnasnet0_75', 'mnasnet1_0', 'mnasnet1_3']
+mobilenet = "mobilenet", ['mobilenet_v2', "mobilenet_v3_large", "mobilenet_v3_small"]
 resnet = "resnet", ['resnet18', 'resnet34', 'resnet50', 'resnet101', 'resnet152', 'resnext50_32x4d',
           'resnext101_32x8d','wide_resnet50_2', 'wide_resnet101_2']
-vgg = "vgg", ['vgg11', 'vgg11_bn', 'vgg13', 'vgg13_bn', 'vgg16', 'vgg16_bn', 'vgg19_bn', 'vgg19']
-squeezenet = "squeezenet", ['squeezenet1_0', 'squeezenet1_1']
-densenet = "densenet", ['densenet121', 'densenet169', 'densenet201', 'densenet161']
-googlenet = "googlenet", ['googlenet']
-mobilenet = "mobilenet", ['mobilenet_v2', "mobilenet_v3_large", "mobilenet_v3_small"]
-mnasnet = "mnasnet", ['mnasnet0_5', 'mnasnet0_75', 'mnasnet1_0', 'mnasnet1_3']
 shufflenet = "shufflenet", ['shufflenet_v2_x0_5', 'shufflenet_v2_x1_0', 'shufflenet_v2_x1_5', 'shufflenet_v2_x2_0']
+squeezenet = "squeezenet", ['squeezenet1_0', 'squeezenet1_1']
+vgg = "vgg", ['vgg11', 'vgg11_bn', 'vgg13', 'vgg13_bn', 'vgg16', 'vgg16_bn', 'vgg19_bn', 'vgg19']
+visiontransformer = "visiontransformer", ['vit_b_16', 'vit_b_32', 'vit_l_16', 'vit_l_32']
 xlmr = "xlmr", ['XLMR_BASE_ENCODER', 'XLMR_LARGE_ENCODER']
 roberta = "roberta", ['ROBERTA_BASE_ENCODER', 'ROBERTA_LARGE_ENCODER']
 
-model_families = [alexnet, resnet, vgg, squeezenet, densenet, googlenet, mobilenet, mnasnet, shufflenet, xlmr, roberta]
+model_families = [alexnet, convnext, densenet, efficientnet, googlenet, inception, maxvit, mnasnet, mobilenet, 
+                  resnet, shufflenet, squeezenet, vgg, visiontransformer, xlmr, roberta]
 
 name_to_family = {}
 for family, family_models in model_families:
