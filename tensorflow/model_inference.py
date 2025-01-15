@@ -47,8 +47,6 @@ MODEL_MAP = {
     "convnext_tiny": tf.keras.applications.ConvNeXtTiny,
     "convnext_small": tf.keras.applications.ConvNeXtSmall,
     "convnext_base": tf.keras.applications.ConvNeXtBase,
-    "convnext_large": tf.keras.applications.ConvNeXtLarge,
-    "convnext_xlarge": tf.keras.applications.ConvNeXtXLarge,
     "xlm_roberta": lambda: TFAutoModel.from_pretrained("jplu/tf-xlm-roberta-base"),
     "gpt2": lambda: TFAutoModel.from_pretrained("gpt2"),
     "gemma": lambda: TFAutoModel.from_pretrained("google/gemma-7b"),
@@ -91,8 +89,6 @@ name_to_family = {
     "convnext_tiny": "convnext",
     "convnext_small": "convnext",
     "convnext_base": "convnext",
-    "convnext_large": "convnext",
-    "convnext_xlarge": "convnext",
     "xlm_roberta": "xlm_roberta",
     "llama3": "llama",
     "gpt2": "gpt",
@@ -123,7 +119,7 @@ with tf.device(getDeviceName(args.gpu)):
             input = np.expand_dims(input, axis=0)
             output = model(input)
         elif name_to_family[args.model] in ["bert", "xlm_roberta", "llama", "gpt", "gemma", "albert", "bart"]:
-            tokenizer = AutoTokenizer.from_pretrained(args.model)
+            tokenizer = AutoTokenizer.from_pretrained(identifiers[args.model])
             input_text = "This is a sample input text for the model."
             inputs = tokenizer(input_text, return_tensors='tf')
             output = model(inputs['input_ids'])

@@ -17,7 +17,7 @@ import traceback
 import torch
 
 from utils import getSystem, latest_file
-from format_profiles import validProfile
+# from format_profiles import validProfile
 
 
 def run_command(folder, command):
@@ -27,25 +27,6 @@ def run_command(folder, command):
     profile_file = latest_file(folder)
     # return validProfile(profile_file), profile_file, output
     return True, profile_file, output
-
-
-def run_command_popen(folder, command, model_type):
-    """
-    DOESN'T WORK, USE run_command() INSTEAD. Uses subprocess.Popen() instead of subprocess.run() to get the process id.
-
-    The reason this does not work is because the command run is nvprof, and nvprof starts another process
-    which is the actual executable with another process id.
-    """
-    process = subprocess.Popen(shlex.split(command))
-    process.wait()
-
-    process_id = process.pid
-    profile_file = folder / f"{model_type}{process_id}.csv"
-    if not profile_file.exists():
-        raise FileNotFoundError(
-            f"File {profile_file} does not exist and cannot be validated."
-        )
-    return validProfile(profile_file), profile_file
 
 
 if __name__ == "__main__":
@@ -87,9 +68,10 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
+    vision_models = ["resnet50", "resnet101", "resnet152", "vgg16", "vgg19", "densenet121", "densenet169", "densenet201", "mobilenet_v2", "mobilenet_v3_large", "mobilenet_v3_small", "inception_v3","inception_resnet_v2","efficientnet_b0","efficientnet_b1","efficientnet_b2","efficientnet_b3","efficientnet_b4","efficientnet_b5","efficientnet_b6","efficientnet_b7","convnext_tiny","convnext_small","convnext_base"]
+    text_models = ["xlm_roberta","llama3","gpt2","gemma","bert","albert","bart"]
+    models_to_profile = vision_models + text_models
 
-    models_to_profile = ["resnet50", "resnet101", "resnet152", "vgg16", "vgg19", "densenet121", "densenet169", "densenet201", "mobilenet_v2", "mobilenet_v3_large", "mobilenet_v3_small"]
-    # models_to_profile = config.TEXT_MODELS
     if len(args.models) > 0:
         models_to_profile = args.models
         print(f"Profiling models {models_to_profile}")
