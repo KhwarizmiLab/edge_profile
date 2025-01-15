@@ -33,25 +33,6 @@ def run_command(folder, command):
     return True, profile_file, output
 
 
-def run_command_popen(folder, command, model_type):
-    """
-    DOESN'T WORK, USE run_command() INSTEAD. Uses subprocess.Popen() instead of subprocess.run() to get the process id.
-
-    The reason this does not work is because the command run is nvprof, and nvprof starts another process
-    which is the actual executable with another process id.
-    """
-    process = subprocess.Popen(shlex.split(command))
-    process.wait()
-
-    process_id = process.pid
-    profile_file = folder / f"{model_type}{process_id}.csv"
-    if not profile_file.exists():
-        raise FileNotFoundError(
-            f"File {profile_file} does not exist and cannot be validated."
-        )
-    return validProfile(profile_file), profile_file
-
-
 def generateExeName(use_exe: bool, use_tf: bool) -> str:
     if use_tf:
         assert not use_exe

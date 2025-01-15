@@ -7,7 +7,6 @@ import torch
 
 from construct_input import construct_input
 from get_model import get_model
-from model_manager import VictimModelManager, PruneModelManager, QuantizedModelManager
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-model", type=str, default="resnet")
@@ -21,30 +20,13 @@ parser.add_argument("-seed", type=int, default=42,
                     help="Random seed for random inputs.")
 parser.add_argument("-pretrained", action='store_true',
                     help="Use a pretrained model")
-parser.add_argument("-load_path", default=None,
-                    help="Provide a path to a model to be used.")
 
 
 args = parser.parse_args()
 
 model = args.model
 model_name = args.model
-if args.load_path is not None:
-    gpu = args.gpu if args.gpu >=0 else None
-    if args.load_path.find(PruneModelManager.FOLDER_NAME) >= 0:
-        manager = PruneModelManager.load(model_path=args.load_path, gpu=gpu)
-        model = manager.model
-        model_name = manager.model_name
-    elif args.load_path.find(QuantizedModelManager.FOLDER_NAME) >= 0:
-        manager = QuantizedModelManager.load(model_path=args.load_path, gpu=gpu)
-        model = manager.model
-        model_name = manager.model_name
-    else:
-        manager = VictimModelManager.load(args.load_path, gpu)
-        model = manager.model
-        model_name = manager.model_name
-else:
-    model, transform = get_model(args.model, llm=args.input=="text", pretrained=args.pretrained)
+model, transform = get_model(args.model, llm=args.input=="text", pretrained=args.pretrained)
 
 device = torch.device("cpu")
 dev_name = "cpu"
