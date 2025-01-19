@@ -138,4 +138,3 @@ if __name__ == '__main__':
     df = filter_cols(all_data(data_folder), substrs=features)
 
     generatePlot(df, model_architectures, features)
-
